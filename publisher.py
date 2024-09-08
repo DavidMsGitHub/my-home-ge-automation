@@ -129,7 +129,7 @@ def scrape_and_publish(link, description=""):
     balance_choice = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div[2]/div/div/div[1]/div[2]/div/div/div/div[3]/div/div/div[1]/label'))
     )
-    time.sleep(0.1)
+    time.sleep(2)
     driver.execute_script("arguments[0].click();", balance_choice)
     pay_button = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div[2]/div/div/div[2]/div/div/div/div[3]/button'))
