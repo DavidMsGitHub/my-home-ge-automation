@@ -134,7 +134,7 @@ def scrape_and_publish(link, description=""):
     pay_button = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div[2]/div/div/div[2]/div/div/div/div[3]/button'))
     )
-    time.sleep(0.5)
+    time.sleep(2)
     driver.execute_script("arguments[0].click();", pay_button)
     time.sleep(500)
     driver.quit()
