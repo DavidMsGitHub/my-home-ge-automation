@@ -37,7 +37,6 @@ def scrape_bina_iyideba(link):
     info_grid = driver.find_element(By.CSS_SELECTOR, "div.grid.gap-4.grid-cols-1")
     info_in_info_grid = info_grid.find_element(By.CSS_SELECTOR, "div.flex.text-sm")
     statusis_elementi = info_in_info_grid.find_element(By.TAG_NAME, "div").text.replace("სტატუსი\n", "")
-    print(statusis_elementi)
 
     scraped_dict = {
         "tipi": check_type(gancxadeba),
@@ -67,7 +66,7 @@ def scrape_bina_iyideba(link):
     for image in images:
         url = image.get_attribute("src")
         response = requests.get(url, stream=True)
-        with open(f"images/{gancxadebisid}/{count}.png","wb") as img:
+        with open(f"{gancxadebisid}/{count}.png","wb") as img:
             shutil.copyfileobj(response.raw, img)
         response.close()
         count += 1
