@@ -1,7 +1,9 @@
-from publisher import scrape_and_publish
+from publisher import scrape_and_publish, scrape_and_publish_q
 import time
 
 tasks_dict = {}
+type = input("აირჩიე რეჟიმი:\n 1) იყიდება\n 2) ქირავდება\n")
+
 def start():
     link = input("Paste the link of MyHome Post: ")
     description = input("Type Description you want your post to have: ")
@@ -20,8 +22,13 @@ def start():
         time.sleep(0.8)
         print("START!")
         for link,description in tasks_dict.items():
-            scrape_and_publish(link, description)
-            print(link, "DONE")
+            if type == "1":
+                scrape_and_publish(link, description)
+                print(link, "DONE")
+            elif type == "2":
+                scrape_and_publish_q(link, description)
+                print(link, "DONE")
 
 start()
+
 

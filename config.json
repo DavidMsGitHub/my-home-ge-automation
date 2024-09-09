@@ -1,13 +1,14 @@
 {
   "credentials": {
-    "email": "test@mail.com",
-    "password": "test1234"
+    "email": "decpacito1997@gmail.com",
+    "password": "Maxo1997"
   },
 
   "contact": {
-    "name": "George",
-    "number": "571234233"
+    "name": "მურაზი",
+    "number": "577176175"
   },
 
-  "webdriver-location": "/Users/test/Desktop/Desktop - David’s MacBook Pro/chromedriver"
+  "webdriver-location": "/Users/davitmirzoevi/Desktop/Desktop - Davit’s MacBook Pro/chromedriver"
+
 }

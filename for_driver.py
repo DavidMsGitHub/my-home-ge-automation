@@ -17,3 +17,22 @@ def cdriver():
 
     driver = webdriver.Chrome(service=service)
     return driver
+def wait_until_clickable_xpath(xpath, time, driver):
+    gela = WebDriverWait(driver, time).until(
+        EC.element_to_be_clickable((By.XPATH, xpath))
+    )
+    return gela
+def wait_until_xpath(xpath, time, driver):
+    try:
+        gela = WebDriverWait(driver, time).until(
+            EC.presence_of_element_located((By.XPATH, xpath))
+        )
+        return gela
+    except:
+        return False
+
+def wait_until_cs(cssselector, time, driver):
+    gela = WebDriverWait(driver, time).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, cssselector))
+    )
+    return gela
