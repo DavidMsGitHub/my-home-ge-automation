@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import json
 
-with open("config.json", "r") as cfg:
+with open("../myhome-automation/config.json", "r") as cfg:
     json_string = json.load(cfg)
     webdriver_location = json_string["webdriver-location"]
 

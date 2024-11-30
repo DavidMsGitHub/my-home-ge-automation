@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea6f862a-792c-45b7-a49f-5d86d0e84497" name="Changes" comment="Fixed payment">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/publisher.py" beforeDir="false" afterPath="$PROJECT_DIR$/publisher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper.py" afterDir="false" />
-    </list>
+    <list default="true" id="ea6f862a-792c-45b7-a49f-5d86d0e84497" name="Changes" comment="Added Renting Mode, Fixed some errors, Fixed Unable to upload 1 bedroom apartment(now it works too) + some small speed improvements" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,14 +36,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Python.main.executor": "Debug",
+    "Python.main.executor": "Run",
     "Python.publisher.executor": "Debug",
     "Python.scraper.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="myhome-automation" />
       <option name="ENV_FILES" value="" />
@@ -149,13 +143,22 @@
       <option name="project" value="LOCAL" />
       <updated>1725795058207</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added Renting Mode, Fixed some errors, Fixed Unable to upload 1 bedroom apartment(now it works too) + some small speed improvements">
+      <option name="closed" value="true" />
+      <created>1725912117295</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1725912117295</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="v1" />
     <MESSAGE value="Updated" />
     <MESSAGE value="Fixed payment" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed payment" />
+    <MESSAGE value="Added Renting Mode, Fixed some errors, Fixed Unable to upload 1 bedroom apartment(now it works too) + some small speed improvements" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Renting Mode, Fixed some errors, Fixed Unable to upload 1 bedroom apartment(now it works too) + some small speed improvements" />
   </component>
 </project>
