@@ -1,8 +1,10 @@
 from scraper import scrape_bina_iyideba, scrape_bina_qiravdeba
 from for_driver import *
-import time
 import os
+import time
 
+#TODO 1 AXALI INFOS GADAMUSHAVEBA
+#TODO 2 AM INFOS GAMOYENEBA DA IM DAMATEBIT GILAKEBZE DACHERA
 
 
 def scrape_and_publish_q(link, description=""):
@@ -20,54 +22,50 @@ def scrape_and_publish_q(link, description=""):
 
     driver.get("https://statements.tnet.ge/ka/statement/create?referrer=myhome")
 
-    driver.find_element(By.CSS_SELECTOR, "button.luk-px-5").click()
-    time.sleep(1)
+    wait_until_cs( "button.luk-px-5",10, driver).click()
 
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.ID, "Email"))
-    ).send_keys(mhemail)
-    driver.find_element(By.ID, "Password").send_keys(mhpassword)
-    driver.find_element(By.CSS_SELECTOR, "button.gradient-button").click()
+    wait_until_id(10, driver, "Email").send_keys(mhemail)
+    wait_until_id(10, driver, "Password").send_keys(mhpassword)
+    wait_until_cs( "button.gradient-button",10, driver).click()
 
-    bina_gilaki = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="0"]/div[2]/div/div/div/div[1]/label'))
-    )
-
+    bina_gilaki = wait_until_xpath(10, driver,'//*[@id="0"]/div[2]/div/div/div/div[1]/label')
     bina_gilaki.click()
-    driver.find_element(By.XPATH, '//*[@id="0"]/div[3]/div/div/div/div[2]/label').click()
-    six_months = driver.find_element(By.XPATH, '//*[@id="0"]/div[4]/div/div/div/div[2]/label')
+
+    wait_until_xpath(10, driver, '//*[@id="0"]/div[3]/div/div/div/div[2]/label').click()
+    six_months = wait_until_xpath(10, driver, '//*[@id="0"]/div[4]/div/div/div/div[2]/label')
     driver.execute_script("arguments[0].click();", six_months)
 
-    airchiet_gaqiravebis_tipi = driver.find_element(By.XPATH, '//*[@id="0"]/div[5]/div/div/div/div')
+    airchiet_gaqiravebis_tipi = wait_until_xpath(10, driver, '//*[@id="0"]/div[5]/div/div/div/div')
     airchiet_gaqiravebis_tipi.click()
-    time.sleep(0.5)
-    mtliani_qoneba = driver.find_element(By.CSS_SELECTOR, 'li.luk-w-full.luk-p-2.luk-rounded-md.luk-text-sm.luk-font-regular.luk-outline-0.luk-cursor-pointer.luk-text-black-70')
+    mtliani_qoneba = wait_until_cs( 'li.luk-w-full.luk-p-2.luk-rounded-md.luk-text-sm.luk-font-regular.luk-outline-0.luk-cursor-pointer.luk-text-black-70',10, driver)
     driver.execute_script("arguments[0].click();", mtliani_qoneba)
+
     #agarmaxsovs aq raiyo :D
-    # driver.find_element(By.XPATH, '//*[@id="0"]/div[5]/div/div/div/div').click()
+    # wait_until_xpath(10, driver, '//*[@id="0"]/div[5]/div/div/div/div').click()
     # driver.find_element(By.CSS_SELECTOR,
     #                     "div.luk-flex.luk-justify-start.luk-items-end.luk-relative.luk-cursor-text.luk-overflow-hidden.luk-border.luk-rounded-lg.luk-w-full.luk-h-12").click()
-    driver.find_element(By.XPATH, '//*[@id="0"]/div[6]/div/div/div/div').click()
 
-    tbilisi = wait_until_xpath('//*[@id="0"]/div[6]/div/div/div/div[2]/ul/li[1]', 10,  driver)
+
+    wait_until_xpath(10, driver, '//*[@id="0"]/div[6]/div/div/div/div').click()
+
+    tbilisi = wait_until_xpath(60, driver,'//*[@id="0"]/div[6]/div/div/div/div[2]/ul/li[1]')
     driver.execute_script("arguments[0].click();", tbilisi)
 
-    driver.find_element(By.XPATH, "//label[@for=':ro:']/input").send_keys(scraped["misamarti"])
-    time.sleep(1)
-    listo = driver.find_element(By.CSS_SELECTOR, 'ul.list-none')
-    first_result = listo.find_element(By.CSS_SELECTOR, "li.cursor-pointer")
+    wait_until_xpath(10, driver, "//label[@for=':ro:']/input").send_keys(scraped["misamarti"])
+    listo = wait_until_cs( 'ul.list-none',10, driver)
+    first_result = wait_until_cs( "li.cursor-pointer",10, listo)
     driver.execute_script("arguments[0].click();", first_result)
 
-    label_element = driver.find_element(By.XPATH, f"//label[.//span[text()='{scraped['otax-raodenoba']}']]")
+    label_element = wait_until_xpath(10, driver, f"//label[.//span[text()='{scraped['otax-raodenoba']}']]")
     driver.execute_script("arguments[0].scrollIntoView(true);", label_element)
 
     wait_until_xpath(f"//label[.//span[text()='{scraped['otax-raodenoba']}']]", 10, driver)
 
     driver.execute_script("arguments[0].click();", label_element)
 
-    time.sleep(1.5)
 
-    element = driver.find_element(By.XPATH, '//*[@id="1"]/div[2]/div/div[4]')
+
+    element = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[4]')
     elements = element.find_elements(By.TAG_NAME, "span")
     count = 0
     if int(scraped["sadzinebeli"]) >= 1:
@@ -75,10 +73,12 @@ def scrape_and_publish_q(link, description=""):
             if i.text == scraped["sadzinebeli"]:
                 driver.execute_script("arguments[0].click();", i)
 
-    driver.find_element(By.XPATH, '//*[@id="1"]/div[2]/div/div[8]/div[1]/div/label').send_keys(scraped["sartuli"])
-    driver.find_element(By.XPATH, '//*[@id="1"]/div[2]/div/div[8]/div[2]/div/label').send_keys(scraped["sartuli-sul"])
+    wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[8]/div[1]/div/label').send_keys(scraped["sartuli"])
+    wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[8]/div[2]/div/label').send_keys(scraped["sartuli-sul"])
 
-    driver.find_element(By.XPATH, '//*[@id="1"]/div[2]/div/div[10]/div/div/div').click()
+    el = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[10]/div/div/div')
+    driver.execute_script("arguments[0].click();", el)
+
     status_xpath = ''
     if scraped["status"] == "ძველი აშენებული":
         status_xpath = '//*[@id="1"]/div[2]/div/div[10]/div/div/div[2]/ul/li[1]'
@@ -87,20 +87,20 @@ def scrape_and_publish_q(link, description=""):
     elif scraped["status"] == "მშენებარე":
         status_xpath = '//*[@id="1"]/div[2]/div/div[10]/div/div/div[2]/ul/li[3]'
 
-    status = driver.find_element(By.XPATH, status_xpath)
+    status = wait_until_xpath(10, driver, status_xpath)
     driver.execute_script("arguments[0].click();", status)
 
-    status_dropdown = driver.find_element(By.XPATH, '//*[@id="1"]/div[2]/div/div[16]/div/div/div[1]')
+    status_dropdown = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[16]/div/div/div[1]')
     driver.execute_script("arguments[0].click();", status_dropdown)
-    arastandartuli = driver.find_element(By.XPATH, '//*[@id="1"]/div[2]/div/div[16]/div/div/div[2]/ul/li[1]')
+    arastandartuli = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[16]/div/div/div[2]/ul/li[1]')
     driver.execute_script("arguments[0].click();", arastandartuli)
 
-    driver.find_element(By.XPATH, '//*[@id="2"]/div[3]/div[2]/div/div[1]/div/label').send_keys(scraped["parti"])
-    driver.find_element(By.XPATH, '//*[@id="2"]/div[3]/div[3]/div[1]/div/label').send_keys(scraped["fasi"])
+    wait_until_xpath(10, driver, '//*[@id="2"]/div[3]/div[2]/div/div[1]/div/label').send_keys(scraped["parti"])
+    wait_until_xpath(10, driver, '//*[@id="2"]/div[3]/div[3]/div[1]/div/label').send_keys(scraped["fasi"])
 
     # contact information
-    driver.find_element(By.XPATH, '//*[@id=":r1p:"]').send_keys(contact_name)
-    driver.find_element(By.XPATH, '//*[@id="3"]/div[2]/div/div[5]/div/div/label').send_keys(Keys.BACKSPACE,
+    wait_until_xpath(10, driver, '//*[@id=":r1p:"]').send_keys(contact_name)
+    wait_until_xpath(10, driver, '//*[@id="3"]/div[2]/div/div[5]/div/div/label').send_keys(Keys.BACKSPACE,
                                                                                             Keys.BACKSPACE,
                                                                                             Keys.BACKSPACE,
                                                                                             Keys.BACKSPACE,
@@ -111,17 +111,16 @@ def scrape_and_publish_q(link, description=""):
                                                                                             Keys.BACKSPACE,
                                                                                             contact_number)
     # description geo,eng,rus
-    driver.find_element(By.XPATH, '//*[@id="4"]/div[2]/div[2]/textarea').send_keys(description)
+    wait_until_xpath(10, driver, '//*[@id="4"]/div[2]/div[2]/textarea').send_keys(description)
     # eng
-    eng_button = driver.find_element(By.XPATH, '//*[@id="4"]/div[2]/div[1]/div[1]/button[2]')
+    eng_button = wait_until_xpath(10, driver, '//*[@id="4"]/div[2]/div[1]/div[1]/button[2]')
     driver.execute_script("arguments[0].click();", eng_button)
-    translate_button = driver.find_element(By.XPATH, '//*[@id="4"]/div[2]/div[1]/div[2]/div')
+    translate_button = wait_until_xpath(10, driver, '//*[@id="4"]/div[2]/div[1]/div[2]/div')
     driver.execute_script("arguments[0].click();", translate_button)
-    time.sleep(0.1)
     # rus
-    rus_button = driver.find_element(By.XPATH, '//*[@id="4"]/div[2]/div[1]/div[1]/button[3]')
+    rus_button = wait_until_xpath(10, driver, '//*[@id="4"]/div[2]/div[1]/div[1]/button[3]')
     driver.execute_script("arguments[0].click();", rus_button)
-    translate_button = driver.find_element(By.XPATH, '//*[@id="4"]/div[2]/div[1]/div[2]/div')
+    translate_button = wait_until_xpath(10, driver, '//*[@id="4"]/div[2]/div[1]/div[2]/div')
     driver.execute_script("arguments[0].click();", translate_button)
     # photo upload
     photo_folder = f'{scraped["id"]}/'
@@ -135,10 +134,10 @@ def scrape_and_publish_q(link, description=""):
     file_paths = "\n".join(photo_files)
     file_input.send_keys(file_paths)
 
-    time.sleep(1)
+
     # upload
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    container = driver.find_element(By.CSS_SELECTOR, "div.fixed.bottom-0.left-0.right-0.z-20.flex")
+    container = wait_until_cs( "div.fixed.bottom-0.left-0.right-0.z-20.flex",10, driver)
     buttons = container.find_elements(By.TAG_NAME, "button")
     upload_button = buttons[1]
     try:
@@ -146,18 +145,18 @@ def scrape_and_publish_q(link, description=""):
     except:
         driver.execute_script("arguments[0].click();", upload_button)
 
-    payment_choice = wait_until_xpath('//*[@id="root"]/div[2]/div/div/div[1]/div[1]/div/div/div/div[1]/label', 60, driver)
+
+    payment_choice = wait_until_xpath(60, driver,'//*[@id="root"]/div[2]/div/div/div[1]/div[1]/div/div/div/div[1]/label')
 
     driver.execute_script("arguments[0].click();", payment_choice)
-    time.sleep(5)
+
     balance_choice = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div/div[1]/div[2]/div/div/div/div[3]/div/div/div[1]/label', 60, driver)
     driver.execute_script("arguments[0].click();", balance_choice)
     pay_button = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div/div[2]/div/div/div/div[3]/button', 60, driver)
     driver.execute_script("arguments[0].click();", pay_button)
-    gela = wait_until_xpath("//h1[contains(text(), 'გადახდა წარმატებით განხორციელდა')]", 30, driver)
+    gela = wait_until_xpath(30, driver, "//h1[contains(text(), 'გადახდა წარმატებით განხორციელდა')]")
     if not gela:
         driver.quit()
-        scrape_and_publish_q(link, description)
     else:
         driver.quit()
 
@@ -177,14 +176,13 @@ def scrape_and_publish(link, description=""):
 
     driver.get("https://statements.tnet.ge/ka/statement/create?referrer=myhome")
 
-    driver.find_element(By.CSS_SELECTOR, "button.luk-px-5").click()
-    time.sleep(1)
+    wait_until_cs( "button.luk-px-5",10, driver).click()
 
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.ID, "Email"))
     ).send_keys(mhemail)
-    driver.find_element(By.ID, "Password").send_keys(mhpassword)
-    driver.find_element(By.CSS_SELECTOR, "button.gradient-button").click()
+    wait_until_id(10, driver, "Password").send_keys(mhpassword)
+    wait_until_cs( "button.gradient-button",10, driver).click()
 
     bina_gilaki = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, '//*[@id="0"]/div[2]/div/div/div/div[1]/label'))
@@ -192,28 +190,25 @@ def scrape_and_publish(link, description=""):
 
     bina_gilaki.click()
     if scraped["tipi"] == "იყიდება":
-        driver.find_element(By.XPATH, '//*[@id="0"]/div[3]/div/div/div/div[1]/label').click()
-    driver.find_element(By.CSS_SELECTOR, "div.luk-flex.luk-justify-start.luk-items-end.luk-relative.luk-cursor-text.luk-overflow-hidden.luk-border.luk-rounded-lg.luk-w-full.luk-h-12").click()
-    time.sleep(1)
+        wait_until_xpath(10, driver, '//*[@id="0"]/div[3]/div/div/div/div[1]/label').click()
+    wait_until_cs( "div.luk-flex.luk-justify-start.luk-items-end.luk-relative.luk-cursor-text.luk-overflow-hidden.luk-border.luk-rounded-lg.luk-w-full.luk-h-12",10, driver).click()
 
-    tbilisi = driver.find_element(By.XPATH, '//*[@id="0"]/div[4]/div/div/div/div[2]/ul/li[1]')
+    tbilisi = wait_until_xpath(10, driver, '//*[@id="0"]/div[4]/div/div/div/div[2]/ul/li[1]')
     driver.execute_script("arguments[0].click();", tbilisi)
 
-    driver.find_element(By.XPATH, "//label[@for=':ri:']/input").send_keys(scraped["misamarti"])
-    time.sleep(1)
-    listo = driver.find_element(By.CSS_SELECTOR, 'ul.list-none')
-    first_result = listo.find_element(By.CSS_SELECTOR, "li.cursor-pointer")
+    wait_until_xpath(10, driver, "//label[@for=':ri:']/input").send_keys(scraped["misamarti"])
+    listo = wait_until_cs( 'ul.list-none',10, driver)
+    first_result = wait_until_cs( "li.cursor-pointer",10, listo)
     driver.execute_script("arguments[0].click();", first_result)
 
 
-    label_element = driver.find_element(By.XPATH, f"//label[.//span[text()='{scraped['otax-raodenoba']}']]")
+    label_element = wait_until_xpath(10, driver, f"//label[.//span[text()='{scraped['otax-raodenoba']}']]")
     driver.execute_script("arguments[0].scrollIntoView(true);", label_element)
-    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, f"//label[.//span[text()='{scraped['otax-raodenoba']}']]")))
+    wait_until_xpath(10, driver,f"//label[.//span[text()='{scraped['otax-raodenoba']}']]")
     driver.execute_script("arguments[0].click();", label_element)
 
-    time.sleep(1.5)
 
-    element = driver.find_element(By.XPATH, '//*[@id="1"]/div[2]/div/div[4]')
+    element = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[4]')
     elements = element.find_elements(By.TAG_NAME, "span")
     count = 0
     if int(scraped["sadzinebeli"]) >= 1:
@@ -221,10 +216,13 @@ def scrape_and_publish(link, description=""):
             if i.text == scraped["sadzinebeli"]:
                 driver.execute_script("arguments[0].click();", i)
 
-    driver.find_element(By.XPATH, '//*[@id="1"]/div[2]/div/div[8]/div[1]/div/label').send_keys(scraped["sartuli"])
-    driver.find_element(By.XPATH, '//*[@id="1"]/div[2]/div/div[8]/div[2]/div/label').send_keys(scraped["sartuli-sul"])
+    wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[8]/div[1]/div/label').send_keys(scraped["sartuli"])
+    wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[8]/div[2]/div/label').send_keys(scraped["sartuli-sul"])
+    ###-----#_#_#__##__##__#
+    el = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[10]/div/div/div')
+    driver.execute_script("arguments[0].click();", el)
+    #_#_#__#_#_#_#_#_#_
 
-    driver.find_element(By.XPATH, '//*[@id="1"]/div[2]/div/div[10]/div/div/div').click()
     status_xpath = ''
     if scraped["status"] == "ძველი აშენებული":
         status_xpath = '//*[@id="1"]/div[2]/div/div[10]/div/div/div[2]/ul/li[1]'
@@ -233,32 +231,31 @@ def scrape_and_publish(link, description=""):
     elif scraped["status"] == "მშენებარე":
         status_xpath = '//*[@id="1"]/div[2]/div/div[10]/div/div/div[2]/ul/li[3]'
 
-    status = driver.find_element(By.XPATH, status_xpath)
+    status = wait_until_xpath(10, driver, status_xpath)
     driver.execute_script("arguments[0].click();", status)
 
-    status_dropdown = driver.find_element(By.XPATH, '//*[@id="1"]/div[2]/div/div[16]/div/div/div[1]')
+    status_dropdown = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[16]/div/div/div[1]')
     driver.execute_script("arguments[0].click();", status_dropdown)
-    arastandartuli = driver.find_element(By.XPATH, '//*[@id="1"]/div[2]/div/div[16]/div/div/div[2]/ul/li[1]')
+    arastandartuli = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[16]/div/div/div[2]/ul/li[1]')
     driver.execute_script("arguments[0].click();", arastandartuli)
 
-    driver.find_element(By.XPATH, '//*[@id="2"]/div[3]/div[2]/div/div[1]/div/label').send_keys(scraped["parti"])
-    driver.find_element(By.XPATH, '//*[@id="2"]/div[3]/div[3]/div[1]/div/label').send_keys(scraped["fasi"])
+    wait_until_xpath(10, driver, '//*[@id="2"]/div[3]/div[2]/div/div[1]/div/label').send_keys(scraped["parti"])
+    wait_until_xpath(10, driver, '//*[@id="2"]/div[3]/div[3]/div[1]/div/label').send_keys(scraped["fasi"])
 
     #contact information
-    driver.find_element(By.XPATH, '//*[@id=":r1j:"]').send_keys(contact_name)
-    driver.find_element(By.XPATH, '//*[@id="3"]/div[2]/div/div[5]/div/div/label').send_keys(Keys.BACKSPACE, Keys.BACKSPACE, Keys.BACKSPACE, Keys.BACKSPACE, Keys.BACKSPACE ,Keys.BACKSPACE, Keys.BACKSPACE, Keys.BACKSPACE, Keys.BACKSPACE, contact_number)
+    wait_until_xpath(10, driver, '//*[@id=":r1j:"]').send_keys(contact_name)
+    wait_until_xpath(10, driver, '//*[@id="3"]/div[2]/div/div[5]/div/div/label').send_keys(Keys.BACKSPACE, Keys.BACKSPACE, Keys.BACKSPACE, Keys.BACKSPACE, Keys.BACKSPACE ,Keys.BACKSPACE, Keys.BACKSPACE, Keys.BACKSPACE, Keys.BACKSPACE, contact_number)
     #description geo,eng,rus
-    driver.find_element(By.XPATH, '//*[@id="4"]/div[2]/div[2]/textarea').send_keys(description)
+    wait_until_xpath(10, driver, '//*[@id="4"]/div[2]/div[2]/textarea').send_keys(description)
     #eng
-    eng_button = driver.find_element(By.XPATH, '//*[@id="4"]/div[2]/div[1]/div[1]/button[2]')
+    eng_button = wait_until_xpath(10, driver, '//*[@id="4"]/div[2]/div[1]/div[1]/button[2]')
     driver.execute_script("arguments[0].click();", eng_button)
-    translate_button = driver.find_element(By.XPATH, '//*[@id="4"]/div[2]/div[1]/div[2]/div')
+    translate_button = wait_until_xpath(10, driver, '//*[@id="4"]/div[2]/div[1]/div[2]/div')
     driver.execute_script("arguments[0].click();", translate_button)
-    time.sleep(0.1)
     #rus
-    rus_button = driver.find_element(By.XPATH, '//*[@id="4"]/div[2]/div[1]/div[1]/button[3]')
+    rus_button = wait_until_xpath(10, driver, '//*[@id="4"]/div[2]/div[1]/div[1]/button[3]')
     driver.execute_script("arguments[0].click();", rus_button)
-    translate_button = driver.find_element(By.XPATH, '//*[@id="4"]/div[2]/div[1]/div[2]/div')
+    translate_button = wait_until_xpath(10, driver, '//*[@id="4"]/div[2]/div[1]/div[2]/div')
     driver.execute_script("arguments[0].click();", translate_button)
     #photo upload
     photo_folder = f'{scraped["id"]}/'
@@ -272,31 +269,28 @@ def scrape_and_publish(link, description=""):
     file_paths = "\n".join(photo_files)
     file_input.send_keys(file_paths)
 
-    time.sleep(1)
     #upload
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    container = driver.find_element(By.CSS_SELECTOR, "div.fixed.bottom-0.left-0.right-0.z-20.flex")
+    container = wait_until_cs( "div.fixed.bottom-0.left-0.right-0.z-20.flex",10, driver)
     buttons = container.find_elements(By.TAG_NAME, "button")
     upload_button = buttons[1]
     try:
         upload_button.click()
     except:
         driver.execute_script("arguments[0].click();", upload_button)
-    payment_choice = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div[2]/div/div/div[1]/div[1]/div/div/div/div[1]/label'))
-    )
+
+    payment_choice = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div/div[1]/div[1]/div/div/div/div[1]/label', 30, driver)
     driver.execute_script("arguments[0].click();", payment_choice)
-    balance_choice = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div[2]/div/div/div[1]/div[2]/div/div/div/div[3]/div/div/div[1]/label'))
-    )
-    time.sleep(2)
+
+    balance_choice = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div/div[1]/div[2]/div/div/div/div[3]/div/div/div[1]/label', 30, driver)
     driver.execute_script("arguments[0].click();", balance_choice)
-    pay_button = wait_until_xpath('//*[@id="root"]/div[2]/div/div/div[2]/div/div/div/div[3]/button', 30, driver)
-    time.sleep(2)
+    pay_button = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div/div[2]/div/div/div/div[3]/button', 30, driver)
     driver.execute_script("arguments[0].click();", pay_button)
-    gela = wait_until_xpath("//h1[contains(text(), 'გადახდა წარმატებით განხორციელდა')]", 20, driver)
+    gela = wait_until_xpath(30, driver, "//h1[contains(text(), 'გადახდა წარმატებით განხორციელდა')]")
+
     if not gela:
         driver.quit()
-        scrape_and_publish_q(link, description)
+        print("Something Went Wrong...")
     else:
         driver.quit()
+        print("everything went well")

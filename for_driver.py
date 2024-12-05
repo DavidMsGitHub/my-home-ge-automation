@@ -22,7 +22,16 @@ def wait_until_clickable_xpath(xpath, time, driver):
         EC.element_to_be_clickable((By.XPATH, xpath))
     )
     return gela
-def wait_until_xpath(xpath, time, driver):
+
+def wait_until_id(time, driver, id):
+    gela = WebDriverWait(driver, time).until(
+        EC.element_to_be_clickable((By.ID, id))
+    )
+    return gela
+
+
+
+def wait_until_xpath(time, driver, xpath):
     try:
         gela = WebDriverWait(driver, time).until(
             EC.presence_of_element_located((By.XPATH, xpath))

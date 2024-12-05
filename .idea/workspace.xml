@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea6f862a-792c-45b7-a49f-5d86d0e84497" name="Changes" comment="Added Renting Mode, Fixed some errors, Fixed Unable to upload 1 bedroom apartment(now it works too) + some small speed improvements" />
+    <list default="true" id="ea6f862a-792c-45b7-a49f-5d86d0e84497" name="Changes" comment="Added Renting Mode, Fixed some errors, Fixed Unable to upload 1 bedroom apartment(now it works too) + some small speed improvements">
+      <change afterPath="$PROJECT_DIR$/advanced_scraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/for_driver.py" beforeDir="false" afterPath="$PROJECT_DIR$/for_driver.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/publisher.py" beforeDir="false" afterPath="$PROJECT_DIR$/publisher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,6 +32,9 @@
     &quot;accountId&quot;: &quot;2177fbfb-b1c2-493f-9dbb-8d1f0ec9f816&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -38,6 +48,7 @@
   "keyToString": {
     "Python.main.executor": "Run",
     "Python.publisher.executor": "Debug",
+    "Python.sandbox_scraper.executor": "Run",
     "Python.scraper.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main"
@@ -151,8 +162,27 @@
       <option name="project" value="LOCAL" />
       <updated>1725912117295</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Added Renting Mode, Fixed some errors, Fixed Unable to upload 1 bedroom apartment(now it works too) + some small speed improvements">
+      <option name="closed" value="true" />
+      <created>1732977242820</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1732977242820</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="v1" />
