@@ -1,6 +1,9 @@
 from publisher import scrape_and_publish, scrape_and_publish_q
 import time
 
+
+#TODO GADAKETEBA ISE ROM TIPI TAVISIT GANSAZGVROS DA IMIS MIXEDVIT GAUSHVAS SHESABAMISI FUNQCIA
+
 tasks_dict = {}
 type = input("აირჩიე რეჟიმი:\n 1) იყიდება\n 2) ქირავდება\n")
 
@@ -12,15 +15,6 @@ def start():
     if again == "y":
         start()
     else:
-        print("Get ready, we are starting...")
-        time.sleep(0.5)
-        print("3...")
-        time.sleep(1)
-        print("2...")
-        time.sleep(1)
-        print("1...")
-        time.sleep(0.8)
-        print("START!")
         for link,description in tasks_dict.items():
             if type == "1":
                 scrape_and_publish(link, description)
@@ -28,6 +22,8 @@ def start():
             elif type == "2":
                 scrape_and_publish_q(link, description)
                 print(link, "DONE")
+
+
 
 start()
 
