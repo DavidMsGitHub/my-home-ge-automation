@@ -1,4 +1,4 @@
-from scraper import scrape_bina_iyideba, scrape_bina_qiravdeba
+from scraper import scrape_the_post
 from for_driver import *
 import os
 import time
@@ -16,7 +16,7 @@ def scrape_and_publish_q(link, description=""):
         contact_name = json_string["contact"]["name"]
         contact_number = json_string["contact"]["number"]
 
-    scraped = scrape_bina_qiravdeba(link)
+    scraped = scrape_the_post(link)
 
     driver = cdriver()
 
@@ -68,10 +68,11 @@ def scrape_and_publish_q(link, description=""):
     element = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[4]')
     elements = element.find_elements(By.TAG_NAME, "span")
     count = 0
-    if int(scraped["sadzinebeli"]) >= 1:
+    if scraped["sadzinebeli"] != None:
         for i in elements:
             if i.text == scraped["sadzinebeli"]:
                 driver.execute_script("arguments[0].click();", i)
+
 
     wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[8]/div[1]/div/label').send_keys(scraped["sartuli"])
     wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[8]/div[2]/div/label').send_keys(scraped["sartuli-sul"])
@@ -134,8 +135,296 @@ def scrape_and_publish_q(link, description=""):
     file_paths = "\n".join(photo_files)
     file_input.send_keys(file_paths)
 
+    # ashenebis weli
+    if scraped["build_year"] != None:
+        driver.execute_script("arguments[0].click();",
+                              wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[12]/div/div/div'))
 
-    # upload
+        match scraped["build_year"]:
+            case ">2000":
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[12]/div/div/div[2]/ul/li[3]'))
+            case "1995-2000":
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[12]/div/div/div[2]/ul/li[2]'))
+            case "<1995":
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[12]/div/div/div[2]/ul/li[1]'))
+
+    # ashenebis weli
+
+    # parkingis tipi
+    if scraped["parking_type"] != None:
+        driver.execute_script("arguments[0].click();",
+                              wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[22]/div/div/div'))
+        match scraped["parking_type"]:
+            case 1:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[22]/div/div/div[2]/ul/li[1]'))
+            case 2:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[22]/div/div/div[2]/ul/li[2]'))
+            case 3:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[22]/div/div/div[2]/ul/li[3]'))
+            case 4:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[22]/div/div/div[2]/ul/li[4]'))
+            case 5:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[22]/div/div/div[2]/ul/li[5]'))
+            case 6:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[22]/div/div/div[2]/ul/li[6]'))
+    # parkingis tipi
+
+    # -------- gatbobis tipi
+    if scraped["heating_type"] != None:
+        driver.execute_script("arguments[0].click();",
+                              wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[20]/div/div/div'))
+        match scraped["heating_type"]:
+            case 1:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[1]'))
+            case 2:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[2]'))
+            case 3:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[3]'))
+            case 4:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[4]'))
+            case 5:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[5]'))
+            case 6:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[6]'))
+            case 7:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[7]'))
+            case _:
+                pass
+    # -------- gatbobis tipi
+
+    # -------- cxeli wyalis tipi
+    if scraped["hot_water_type"] != None:
+        driver.execute_script("arguments[0].click();",
+                              wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[24]/div/div/div'))
+
+        match scraped["hot_water_type"]:
+            case 1:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[1]'))
+            case 2:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[2]'))
+            case 3:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[3]'))
+            case 4:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[4]'))
+            case 5:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[5]'))
+            case 6:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[6]'))
+            case 7:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[7]'))
+            case 8:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[8]'))
+
+    # -------- cxeli wylis tipi
+
+    # --------sveli wertilis archeva
+
+    if scraped["bathroom_type_id"] != "null":
+        list_of_bti = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[6]/div/div/div')
+        driver.execute_script("arguments[0].click();", list_of_bti)
+        if scraped["bathroom_type_id"] == "1":
+            driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                            '//*[@id="1"]/div[2]/div/div[6]/div/div/div[2]/ul/li[1]'))
+        elif scraped["bathroom_type_id"] == "2":
+            driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                            '//*[@id="1"]/div[2]/div/div[6]/div/div/div[2]/ul/li[2]'))
+        elif scraped["bathroom_type_id"] == "3":
+            driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                            '//*[@id="1"]/div[2]/div/div[6]/div/div/div[2]/ul/li[3]'))
+        else:
+            driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                            '//*[@id="1"]/div[2]/div/div[6]/div/div/div[2]/ul/li[4]'))
+
+    # ----------- sveli wertilis archeva
+
+    # aivnebi tu dafiqsirda chaweros
+    if scraped["balconies"] != None:
+        wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[28]/div[1]/div/label').send_keys(scraped["balconies"])
+        wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[28]/div[2]/div/label').send_keys(
+            scraped["balcony_area"])
+    # aivnani
+    # ----------- parametrebis gilakebi
+    int_button = wait_until_clickable_xpath('//*[@id="1"]/div[3]/div/div/div/div[1]', 20, driver)
+    televizia = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[2]')
+    bunebrivi_airi = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[3]')
+    lifti = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[4]')
+    satvirto_lifti = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[5]')
+    wyali = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[6]')
+    kanalizacia = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[7]')
+    eleqtroenergia = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[8]')
+    telefoni = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[9]')
+    samzareulo_teqnika = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[10]')
+
+    # upiratesobebi
+
+    spa = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[1]')
+    bari = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[2]')
+    sport_darbazi = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[3]')
+    buxari = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[4]')
+    mayali_grili = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[5]')
+    jakuzi = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[6]')
+    sauna = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[7]')
+    signalizacia = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[8]')
+    vintilacia = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[9]')
+    dacva = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[10]')
+
+    # aveji da teqnika
+    aveji = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[1]')
+    sawoli = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[2]')
+    divani = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[3]')
+    magida = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[4]')
+    skamebi = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[5]')
+    qura = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[6]')
+    gumeli = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[7]')
+    kondicioneri = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[8]')
+    macivari = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[9]')
+    sarecxi_manqana = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[10]')
+    churchlis_sarecxi = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[11]')
+    # bejebi
+    kari_kodit = wait_until_xpath(10, driver, '//*[@id="1"]/div[6]/div/div/div/div[1]')
+    airbnb_booking = wait_until_xpath(10, driver, '//*[@id="1"]/div[6]/div/div/div/div[2]')
+    sainvesticio = wait_until_xpath(10, driver, '//*[@id="1"]/div[6]/div/div/div/div[3]')
+    ssmp = wait_until_xpath(10, driver, '//*[@id="1"]/div[6]/div/div/div/div[4]')
+
+    # zeda gilakebi
+    loggia = wait_until_clickable_xpath('//*[@id="1"]/div[2]/div/div[33]/span/div/label', 10, driver)
+    veranda = wait_until_clickable_xpath('//*[@id="1"]/div[2]/div/div[35]/span/div/label', 10, driver)
+    satavsos_tipi = wait_until_clickable_xpath('//*[@id="1"]/div[2]/div/div[37]/span/div/label', 10, driver)
+    sacurao_auzi = wait_until_clickable_xpath('//*[@id="1"]/div[2]/div/div[29]/span/div/label', 10, driver)
+    misaghebi = wait_until_clickable_xpath('//*[@id="1"]/div[2]/div/div[31]/span/div/label', 10, driver)
+    # ----------- parametrebis gilakebi
+
+    time.sleep(1)
+    for parameter in scraped["additions"]:
+        match parameter:
+            case "internet":
+                driver.execute_script("arguments[0].click();", int_button)
+            case "conditioner":
+                driver.execute_script("arguments[0].click();", kondicioneri)
+            case "bed":
+                driver.execute_script("arguments[0].click();", sawoli)
+            case "gas":
+                driver.execute_script("arguments[0].click();", bunebrivi_airi)
+            case "sofa":
+                driver.execute_script("arguments[0].click();", divani)
+            case "tv":
+                driver.execute_script("arguments[0].click();", televizia)
+            case "furniture":
+                driver.execute_script("arguments[0].click();", aveji)
+            case "elevator":
+                driver.execute_script("arguments[0].click();", lifti)
+            case "truck_elevator":
+                driver.execute_script("arguments[0].click();", satvirto_lifti)
+            case "table":
+                driver.execute_script("arguments[0].click();", magida)
+            case "chairs":
+                driver.execute_script("arguments[0].click();", skamebi)
+            case "stove":
+                driver.execute_script("arguments[0].click();", qura)
+            case "oven":
+                driver.execute_script("arguments[0].click();", gumeli)
+            case "water":
+                driver.execute_script("arguments[0].click();", wyali)
+            case "sewerage":
+                driver.execute_script("arguments[0].click();", kanalizacia)
+            case "electricity":
+                driver.execute_script("arguments[0].click();", eleqtroenergia)
+            case "telephone":
+                driver.execute_script("arguments[0].click();", telefoni)
+            case "refrigerator":
+                driver.execute_script("arguments[0].click();", macivari)
+            case "washing_machine":
+                driver.execute_script("arguments[0].click();", sarecxi_manqana)
+            case "kitchen":
+                driver.execute_script("arguments[0].click();", samzareulo_teqnika)
+            case "investment":
+                driver.execute_script("arguments[0].click();", sainvesticio)
+            case "alarm":
+                driver.execute_script("arguments[0].click();", signalizacia)
+            case "guard":
+                driver.execute_script("arguments[0].click();", dacva)
+            case "ventilation":
+                driver.execute_script("arguments[0].click();", vintilacia)
+            case "coded-door":
+                driver.execute_script("arguments[0].click();", kari_kodit)
+            case "bar":
+                driver.execute_script("arguments[0].click();", bari)
+            case "gym":
+                driver.execute_script("arguments[0].click();", sport_darbazi)
+            case "spa":
+                driver.execute_script("arguments[0].click();", spa)
+            case "grill":
+                driver.execute_script("arguments[0].click();", mayali_grili)
+            case "jacuzzi":
+                driver.execute_script("arguments[0].click();", jakuzi)
+            case "sauna":
+                driver.execute_script("arguments[0].click();", sauna)
+            case "airbnb_booking_account":
+                driver.execute_script("arguments[0].click();", airbnb_booking)
+            case "dishwasher":
+                driver.execute("arguments[0].click();", churchlis_sarecxi)
+
+            case "storeroom":
+                print("sacavi")
+                driver.execute_script("arguments[0].scrollIntoView();", satavsos_tipi)
+                driver.execute_script("arguments[0].click();", satavsos_tipi)
+                sacavis_parti_entry = wait_until_xpath(xpath='//*[@id="1"]/div[2]/div/div[38]/div[1]/div/label',
+                                                       driver=driver, time=10)
+                sacavis_parti_entry.send_keys(scraped["store_room_area"])
+            case "loggia":
+                driver.execute_script("arguments[0].click();", loggia)
+                loggia = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[34]/div/div/label')
+                loggia.send_keys(scraped["loggia_area"])
+            case "swimming_pool":
+                driver.execute_script("arguments[0].click();", sacurao_auzi)
+            case "porch":
+                driver.execute_script("arguments[0].click();", veranda)
+                if scraped["porch_area"] != None:
+                    porch_area = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[36]/div/div/label')
+                    porch_area.send_keys(scraped["porch_area"])
+    # case "for-parties":
+    #     driver.execute_script("arguments[0].click();", for_parties)
+    # case "cellar":
+    #     driver.execute_script("arguments[0].click();", cellar)
+    # case "fenced":
+    #     driver.execute_script("arguments[0].click();", dacva)
+    # case "gate":
+    #     driver.execute_script("arguments[0].click();", gate)
+    # case "with_a_yard":
+    #     driver.execute_script("arguments[0].click();", with_a_yard)
+
+    # case "pets-allowed":
+    #     driver.execute_script("arguments[0].click();", pets_allowed)
+    # case "with_buildings":
+    #     driver.execute_script("arguments[0].click();", with_buildings)
+
+
+    #--------- upload and payment part
+
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     container = wait_until_cs( "div.fixed.bottom-0.left-0.right-0.z-20.flex",10, driver)
     buttons = container.find_elements(By.TAG_NAME, "button")
@@ -145,19 +434,20 @@ def scrape_and_publish_q(link, description=""):
     except:
         driver.execute_script("arguments[0].click();", upload_button)
 
-
-    payment_choice = wait_until_xpath(60, driver,'//*[@id="root"]/div[2]/div/div/div[1]/div[1]/div/div/div/div[1]/label')
-
+    payment_choice = wait_until_clickable_xpath(
+        '//*[@id="root"]/div[2]/div/div[1]/div[1]/div[1]/div/div/div/div[1]/label', 30, driver)
     driver.execute_script("arguments[0].click();", payment_choice)
-
-    balance_choice = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div/div[1]/div[2]/div/div/div/div[3]/div/div/div[1]/label', 60, driver)
+    time.sleep(3)
+    balance_choice = wait_until_clickable_xpath(
+        '//*[@id="root"]/div[2]/div/div[1]/div[1]/div[2]/div/div/div/div[3]/div/div/div[1]/label', 30, driver)
     driver.execute_script("arguments[0].click();", balance_choice)
-    pay_button = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div/div[2]/div/div/div/div[3]/button', 60, driver)
+    pay_button = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div[1]/div[2]/div/div/div/div[3]/button', 30,
+                                            driver)
     driver.execute_script("arguments[0].click();", pay_button)
-    gela = wait_until_xpath(30, driver, "//h1[contains(text(), 'გადახდა წარმატებით განხორციელდა')]")
-    if not gela:
-        driver.quit()
-    else:
+    gela = wait_until_xpath(300, driver, "//h1[contains(text(), 'გადახდა წარმატებით განხორციელდა')]")
+
+    if gela:
+        print("Done")
         driver.quit()
 
 
@@ -170,7 +460,7 @@ def scrape_and_publish(link, description=""):
         contact_name = json_string["contact"]["name"]
         contact_number = json_string["contact"]["number"]
 
-    scraped = scrape_bina_iyideba(link)
+    scraped = scrape_the_post(link)
 
     driver = cdriver()
 
@@ -182,9 +472,9 @@ def scrape_and_publish(link, description=""):
         EC.presence_of_element_located((By.ID, "Email"))
     ).send_keys(mhemail)
     wait_until_id(10, driver, "Password").send_keys(mhpassword)
-    wait_until_cs( "button.gradient-button",10, driver).click()
+    wait_until_cs( "button.gradient-button",50, driver).click()
 
-    bina_gilaki = WebDriverWait(driver, 10).until(
+    bina_gilaki = WebDriverWait(driver, 50).until(
         EC.presence_of_element_located((By.XPATH, '//*[@id="0"]/div[2]/div/div/div/div[1]/label'))
     )
 
@@ -211,10 +501,11 @@ def scrape_and_publish(link, description=""):
     element = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[4]')
     elements = element.find_elements(By.TAG_NAME, "span")
     count = 0
-    if int(scraped["sadzinebeli"]) >= 1:
-        for i in elements:
-            if i.text == scraped["sadzinebeli"]:
-                driver.execute_script("arguments[0].click();", i)
+    if scraped["sadzinebeli"] != None:
+        if int(scraped["sadzinebeli"]) >= 1:
+            for i in elements:
+                if i.text == scraped["sadzinebeli"]:
+                    driver.execute_script("arguments[0].click();", i)
 
     wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[8]/div[1]/div/label').send_keys(scraped["sartuli"])
     wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[8]/div[2]/div/label').send_keys(scraped["sartuli-sul"])
@@ -269,7 +560,278 @@ def scrape_and_publish(link, description=""):
     file_paths = "\n".join(photo_files)
     file_input.send_keys(file_paths)
 
-    #upload
+
+    # ashenebis weli
+    if scraped["build_year"] != None:
+        driver.execute_script("arguments[0].click();", wait_until_xpath(10,driver,'//*[@id="1"]/div[2]/div/div[12]/div/div/div'))
+
+        match scraped["build_year"]:
+            case ">2000":
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[12]/div/div/div[2]/ul/li[3]'))
+            case "1995-2000":
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[12]/div/div/div[2]/ul/li[2]'))
+            case "<1995":
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[12]/div/div/div[2]/ul/li[1]'))
+
+    # ashenebis weli
+
+    # parkingis tipi
+    if scraped["parking_type"] != None:
+        driver.execute_script("arguments[0].click();", wait_until_xpath(10,driver,'//*[@id="1"]/div[2]/div/div[22]/div/div/div'))
+        match scraped["parking_type"]:
+            case 1:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10,driver, '//*[@id="1"]/div[2]/div/div[22]/div/div/div[2]/ul/li[1]'))
+            case 2:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[22]/div/div/div[2]/ul/li[2]'))
+            case 3:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[22]/div/div/div[2]/ul/li[3]'))
+            case 4:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[22]/div/div/div[2]/ul/li[4]'))
+            case 5:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[22]/div/div/div[2]/ul/li[5]'))
+            case 6:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[22]/div/div/div[2]/ul/li[6]'))
+    # parkingis tipi
+
+    #-------- gatbobis tipi
+    if scraped["heating_type"] != None:
+        driver.execute_script("arguments[0].click();", wait_until_xpath(10,driver,'//*[@id="1"]/div[2]/div/div[20]/div/div/div'))
+        match scraped["heating_type"]:
+            case 1:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10,driver,'//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[1]'))
+            case 2:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[2]'))
+            case 3:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[3]'))
+            case 4:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[4]'))
+            case 5:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[5]'))
+            case 6:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[6]'))
+            case 7:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[20]/div/div/div[2]/ul/li[7]'))
+            case _:
+                pass
+    # -------- gatbobis tipi
+
+    # -------- cxeli wyalis tipi
+    if scraped["hot_water_type"] != None:
+        driver.execute_script("arguments[0].click();", wait_until_xpath(10,driver,'//*[@id="1"]/div[2]/div/div[24]/div/div/div'))
+
+        match scraped["hot_water_type"]:
+            case 1:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10,driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[1]'))
+            case 2:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[2]'))
+            case 3:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[3]'))
+            case 4:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[4]'))
+            case 5:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[5]'))
+            case 6:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[6]'))
+            case 7:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[7]'))
+            case 8:
+                driver.execute_script("arguments[0].click();", wait_until_xpath(10, driver,
+                                                                                '//*[@id="1"]/div[2]/div/div[24]/div/div/div[2]/ul/li[8]'))
+
+    # -------- cxeli wylis tipi
+
+    #--------sveli wertilis archeva
+
+    if scraped["bathroom_type_id"] != "null":
+        list_of_bti = wait_until_xpath(10,driver, '//*[@id="1"]/div[2]/div/div[6]/div/div/div')
+        driver.execute_script("arguments[0].click();", list_of_bti)
+        if scraped["bathroom_type_id"] == "1":
+            driver.execute_script("arguments[0].click();", wait_until_xpath(10,driver,'//*[@id="1"]/div[2]/div/div[6]/div/div/div[2]/ul/li[1]'))
+        elif scraped["bathroom_type_id"] == "2":
+            driver.execute_script("arguments[0].click();", wait_until_xpath(10,driver,'//*[@id="1"]/div[2]/div/div[6]/div/div/div[2]/ul/li[2]'))
+        elif scraped["bathroom_type_id"] == "3":
+            driver.execute_script("arguments[0].click();", wait_until_xpath(10,driver,'//*[@id="1"]/div[2]/div/div[6]/div/div/div[2]/ul/li[3]'))
+        else:
+            driver.execute_script("arguments[0].click();", wait_until_xpath(10,driver,'//*[@id="1"]/div[2]/div/div[6]/div/div/div[2]/ul/li[4]'))
+
+    #----------- sveli wertilis archeva
+
+
+    #aivnebi tu dafiqsirda chaweros
+    if scraped["balconies"] != None:
+        wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[28]/div[1]/div/label').send_keys(scraped["balconies"])
+        wait_until_xpath(10,driver,'//*[@id="1"]/div[2]/div/div[28]/div[2]/div/label').send_keys(scraped["balcony_area"])
+    # aivnani
+# ----------- parametrebis gilakebi
+    int_button = wait_until_clickable_xpath('//*[@id="1"]/div[3]/div/div/div/div[1]', 20, driver)
+    televizia = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[2]')
+    bunebrivi_airi = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[3]')
+    lifti = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[4]')
+    satvirto_lifti = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[5]')
+    wyali = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[6]')
+    kanalizacia = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[7]')
+    eleqtroenergia = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[8]')
+    telefoni = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[9]')
+    samzareulo_teqnika = wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div/div/div[10]')
+
+    #upiratesobebi
+
+    spa = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[1]')
+    bari = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[2]')
+    sport_darbazi = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[3]')
+    buxari = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[4]')
+    mayali_grili = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[5]')
+    jakuzi = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[6]')
+    sauna = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[7]')
+    signalizacia = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[8]')
+    vintilacia = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[9]')
+    dacva = wait_until_xpath(10, driver, '//*[@id="1"]/div[4]/div/div/div/div[10]')
+
+    #aveji da teqnika
+    aveji = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[1]')
+    sawoli = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[2]')
+    divani = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[3]')
+    magida = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[4]')
+    skamebi = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[5]')
+    qura = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[6]')
+    gumeli = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[7]')
+    kondicioneri = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[8]')
+    macivari = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[9]')
+    sarecxi_manqana = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[10]')
+    churchlis_sarecxi = wait_until_xpath(10, driver, '//*[@id="1"]/div[5]/div/div/div/div[11]')
+    # bejebi
+    kari_kodit = wait_until_xpath(10, driver, '//*[@id="1"]/div[6]/div/div/div/div[1]')
+    airbnb_booking = wait_until_xpath(10, driver, '//*[@id="1"]/div[6]/div/div/div/div[2]')
+    sainvesticio = wait_until_xpath(10, driver, '//*[@id="1"]/div[6]/div/div/div/div[3]')
+    ssmp = wait_until_xpath(10, driver, '//*[@id="1"]/div[6]/div/div/div/div[4]')
+
+
+
+    # zeda gilakebi
+    loggia = wait_until_clickable_xpath('//*[@id="1"]/div[2]/div/div[33]/span/div/label', 10, driver)
+    veranda = wait_until_clickable_xpath('//*[@id="1"]/div[2]/div/div[35]/span/div/label', 10, driver)
+    satavsos_tipi = wait_until_clickable_xpath('//*[@id="1"]/div[2]/div/div[37]/span/div/label', 10, driver)
+    sacurao_auzi = wait_until_clickable_xpath('//*[@id="1"]/div[2]/div/div[29]/span/div/label', 10, driver)
+    misaghebi = wait_until_clickable_xpath('//*[@id="1"]/div[2]/div/div[31]/span/div/label', 10, driver)
+# ----------- parametrebis gilakebi
+
+
+    time.sleep(1)
+    for parameter in scraped["additions"]:
+        match parameter:
+            case "internet":
+                driver.execute_script("arguments[0].click();", int_button)
+            case "conditioner":
+                driver.execute_script("arguments[0].click();", kondicioneri)
+            case "bed":
+                driver.execute_script("arguments[0].click();", sawoli)
+            case "gas":
+                driver.execute_script("arguments[0].click();", bunebrivi_airi)
+            case "sofa":
+                driver.execute_script("arguments[0].click();", divani)
+            case "tv":
+                driver.execute_script("arguments[0].click();", televizia)
+            case "furniture":
+                driver.execute_script("arguments[0].click();", aveji)
+            case "elevator":
+                driver.execute_script("arguments[0].click();", lifti)
+            case "truck_elevator":
+                driver.execute_script("arguments[0].click();", satvirto_lifti)
+            case "table":
+                driver.execute_script("arguments[0].click();", magida)
+            case "chairs":
+                driver.execute_script("arguments[0].click();", skamebi)
+            case "stove":
+                driver.execute_script("arguments[0].click();", qura)
+            case "oven":
+                driver.execute_script("arguments[0].click();", gumeli)
+            case "water":
+                driver.execute_script("arguments[0].click();", wyali)
+            case "sewerage":
+                driver.execute_script("arguments[0].click();", kanalizacia)
+            case "electricity":
+                driver.execute_script("arguments[0].click();", eleqtroenergia)
+            case "telephone":
+                driver.execute_script("arguments[0].click();", telefoni)
+            case "refrigerator":
+                driver.execute_script("arguments[0].click();", macivari)
+            case "washing_machine":
+                driver.execute_script("arguments[0].click();", sarecxi_manqana)
+            case "kitchen":
+                driver.execute_script("arguments[0].click();", samzareulo_teqnika)
+            case "investment":
+                driver.execute_script("arguments[0].click();", sainvesticio)
+            case "alarm":
+                driver.execute_script("arguments[0].click();", signalizacia)
+            case "guard":
+                driver.execute_script("arguments[0].click();", dacva)
+            case "ventilation":
+                driver.execute_script("arguments[0].click();", vintilacia)
+            case "coded-door":
+                driver.execute_script("arguments[0].click();", kari_kodit)
+            case "bar":
+                driver.execute_script("arguments[0].click();", bari)
+            case "gym":
+                driver.execute_script("arguments[0].click();", sport_darbazi)
+            case "spa":
+                driver.execute_script("arguments[0].click();", spa)
+            case "grill":
+                driver.execute_script("arguments[0].click();", mayali_grili)
+            case "jacuzzi":
+                driver.execute_script("arguments[0].click();", jakuzi)
+            case "sauna":
+                driver.execute_script("arguments[0].click();", sauna)
+            case "airbnb_booking_account":
+                driver.execute_script("arguments[0].click();", airbnb_booking)
+            case "dishwasher":
+                driver.execute("arguments[0].click();", churchlis_sarecxi)
+
+            case "storeroom":
+                print("sacavi")
+                driver.execute_script("arguments[0].scrollIntoView();", satavsos_tipi)
+                driver.execute_script("arguments[0].click();", satavsos_tipi)
+                sacavis_parti_entry = wait_until_xpath(xpath='//*[@id="1"]/div[2]/div/div[38]/div[1]/div/label', driver=driver, time=10)
+                sacavis_parti_entry.send_keys(scraped["store_room_area"])
+            case "loggia":
+                driver.execute_script("arguments[0].click();", loggia)
+                loggia = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[34]/div/div/label')
+                loggia.send_keys(scraped["loggia_area"])
+            case "swimming_pool":
+                driver.execute_script("arguments[0].click();", sacurao_auzi)
+            case "porch":
+                driver.execute_script("arguments[0].click();", veranda)
+                if scraped["porch_area"] != None:
+                    porch_area = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[36]/div/div/label')
+                    porch_area.send_keys(scraped["porch_area"])
+    # case "for-parties":
+    #     driver.execute_script("arguments[0].click();", for_parties)
+    # case "cellar":
+    #     driver.execute_script("arguments[0].click();", cellar)
+    # case "fenced":
+    #     driver.execute_script("arguments[0].click();", dacva)
+    # case "gate":
+    #     driver.execute_script("arguments[0].click();", gate)
+    # case "with_a_yard":
+    #     driver.execute_script("arguments[0].click();", with_a_yard)
+
+    # case "pets-allowed":
+    #     driver.execute_script("arguments[0].click();", pets_allowed)
+    # case "with_buildings":
+    #     driver.execute_script("arguments[0].click();", with_buildings)
+
+
+    # #upload and payment
+
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     container = wait_until_cs( "div.fixed.bottom-0.left-0.right-0.z-20.flex",10, driver)
     buttons = container.find_elements(By.TAG_NAME, "button")
@@ -279,18 +841,15 @@ def scrape_and_publish(link, description=""):
     except:
         driver.execute_script("arguments[0].click();", upload_button)
 
-    payment_choice = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div/div[1]/div[1]/div/div/div/div[1]/label', 30, driver)
+    payment_choice = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div[1]/div[1]/div[1]/div/div/div/div[1]/label', 30, driver)
     driver.execute_script("arguments[0].click();", payment_choice)
-
-    balance_choice = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div/div[1]/div[2]/div/div/div/div[3]/div/div/div[1]/label', 30, driver)
+    time.sleep(3)
+    balance_choice = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div[1]/div[1]/div[2]/div/div/div/div[3]/div/div/div[1]/label', 30, driver)
     driver.execute_script("arguments[0].click();", balance_choice)
-    pay_button = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div/div[2]/div/div/div/div[3]/button', 30, driver)
+    pay_button = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div[1]/div[2]/div/div/div/div[3]/button', 30, driver)
     driver.execute_script("arguments[0].click();", pay_button)
-    gela = wait_until_xpath(30, driver, "//h1[contains(text(), 'გადახდა წარმატებით განხორციელდა')]")
+    gela = wait_until_xpath(300, driver, "//h1[contains(text(), 'გადახდა წარმატებით განხორციელდა')]")
 
-    if not gela:
+    if gela:
+        print("Done")
         driver.quit()
-        print("Something Went Wrong...")
-    else:
-        driver.quit()
-        print("everything went well")
