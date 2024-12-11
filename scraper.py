@@ -4,13 +4,7 @@ import shutil
 import requests
 import time
 from for_driver import *
-
-#TODO 0 GADAKETEBA SCRAPERIS UFRO MARTIV XERXZE
-#TODO 1 METI INFOS GAMOTANA MARTIVI XERXIT
-#TODO 2 AM INFOS GADACEMA PUBLISHERISTVIS
-#TODO 3 AUTOMATURAD AGQMA GANCXADEBIS TIPIS
-
-
+from publisher import publish, publish_q
 
 def check_type(post_element):
     if "იყიდება" in post_element:
@@ -18,7 +12,7 @@ def check_type(post_element):
     elif "ქირავდება" in post_element:
         return "ქირავდება"
 
-def scrape_the_post(link):
+def scrape_and_post(link, desc=""):
     driver = cdriver()
     url = link
     driver.get(url)
@@ -105,7 +99,13 @@ def scrape_the_post(link):
 
     # ------- fotoebis mxare
 
+
     driver.quit()
+
+    if check_type(data["dynamic_title"]) == "იყიდება":
+        publish(link,scraped_dict,desc)
+    else:
+        publish_q(link,scraped_dict,desc)
 
     #return json.dumps(scraped_dict, ensure_ascii=False, indent=4)
     return scraped_dict

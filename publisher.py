@@ -1,4 +1,3 @@
-from scraper import scrape_the_post
 from for_driver import *
 import os
 import time
@@ -7,16 +6,14 @@ import time
 #TODO 2 AM INFOS GAMOYENEBA DA IM DAMATEBIT GILAKEBZE DACHERA
 
 
-def scrape_and_publish_q(link, description=""):
+def publish_q(link, scraped, description=""):
     # get credentials
-    with open("config.json", "r") as cfg:
+    with open("config.json", "r", encoding="utf-8") as cfg:
         json_string = json.load(cfg)
         mhemail = json_string["credentials"]["email"]
         mhpassword = json_string["credentials"]["password"]
         contact_name = json_string["contact"]["name"]
         contact_number = json_string["contact"]["number"]
-
-    scraped = scrape_the_post(link)
 
     driver = cdriver()
 
@@ -437,7 +434,7 @@ def scrape_and_publish_q(link, description=""):
     payment_choice = wait_until_clickable_xpath(
         '//*[@id="root"]/div[2]/div/div[1]/div[1]/div[1]/div/div/div/div[1]/label', 30, driver)
     driver.execute_script("arguments[0].click();", payment_choice)
-    time.sleep(3)
+    time.sleep(5)
     balance_choice = wait_until_clickable_xpath(
         '//*[@id="root"]/div[2]/div/div[1]/div[1]/div[2]/div/div/div/div[3]/div/div/div[1]/label', 30, driver)
     driver.execute_script("arguments[0].click();", balance_choice)
@@ -451,16 +448,14 @@ def scrape_and_publish_q(link, description=""):
         driver.quit()
 
 
-def scrape_and_publish(link, description=""):
+def publish(link,scraped,description=""):
     # get credentials
-    with open("config.json", "r") as cfg:
+    with open("config.json", "r", encoding="utf-8") as cfg:
         json_string = json.load(cfg)
         mhemail = json_string["credentials"]["email"]
         mhpassword = json_string["credentials"]["password"]
         contact_name = json_string["contact"]["name"]
         contact_number = json_string["contact"]["number"]
-
-    scraped = scrape_the_post(link)
 
     driver = cdriver()
 
@@ -843,11 +838,12 @@ def scrape_and_publish(link, description=""):
 
     payment_choice = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div[1]/div[1]/div[1]/div/div/div/div[1]/label', 30, driver)
     driver.execute_script("arguments[0].click();", payment_choice)
-    time.sleep(3)
+    time.sleep(4)
     balance_choice = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div[1]/div[1]/div[2]/div/div/div/div[3]/div/div/div[1]/label', 30, driver)
     driver.execute_script("arguments[0].click();", balance_choice)
     pay_button = wait_until_clickable_xpath('//*[@id="root"]/div[2]/div/div[1]/div[2]/div/div/div/div[3]/button', 30, driver)
     driver.execute_script("arguments[0].click();", pay_button)
+    time.sleep(1)
     gela = wait_until_xpath(300, driver, "//h1[contains(text(), 'გადახდა წარმატებით განხორციელდა')]")
 
     if gela:
