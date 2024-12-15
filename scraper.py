@@ -4,7 +4,8 @@ import shutil
 import requests
 import time
 from for_driver import *
-from publisher import publish, publish_q
+from publish_rent import publish_q
+from publish_buy import publish
 
 def check_type(post_element):
     if "იყიდება" in post_element:
@@ -55,7 +56,7 @@ def scrape_and_post(link, desc=""):
         "fasi": str(data["price"]["1"]["price_total"]),
         "parti": str(data["area"]),
         "otax-raodenoba": str(data["room_type_id"]),
-        "sadzinebeli": data["bedroom_type_id"],
+        "sadzinebeli": int(data["bedroom_type_id"]),
         "sartuli": str(data["floor"]),
         "sartuli-sul": str(data["total_floors"]),
         "status": status_id,
@@ -79,8 +80,7 @@ def scrape_and_post(link, desc=""):
 
 
     #------- fotoebis mxare
-
-    driver.find_element(By.CSS_SELECTOR, "img.object-contain").click()
+    wait_until_cs("img.object-contain", 30, driver).click()
     time.sleep(0.5)
     gancxadebisid = str(data["id"])
     if not os.path.exists(gancxadebisid):
@@ -98,6 +98,7 @@ def scrape_and_post(link, desc=""):
         count += 1
 
     # ------- fotoebis mxare
+    print(scraped_dict)
 
 
     driver.quit()
