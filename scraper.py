@@ -13,7 +13,7 @@ def check_type(post_element):
     elif "ქირავდება" in post_element:
         return "ქირავდება"
 
-def scrape_and_post(link, desc=""):
+def scrape_and_post(link, desc="", price = ""):
     driver = cdriver()
     url = link
     driver.get(url)
@@ -102,6 +102,11 @@ def scrape_and_post(link, desc=""):
 
 
     driver.quit()
+
+    #fasis shecvla tu gui-shi shecvlilia
+
+    if int(price) > 0:
+        scraped_dict["fasi"] = str(price)
 
     if check_type(data["dynamic_title"]) == "იყიდება":
         publish(link,scraped_dict,desc)
