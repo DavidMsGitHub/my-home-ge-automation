@@ -2,37 +2,38 @@ from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QLabel, QLineEdit, QTextEdit, QPushButton,
     QTableWidget, QTableWidgetItem, QHeaderView, QHBoxLayout, QWidget, QMessageBox
 )
-from PyQt5.QtGui import QFont
-from PyQt5.QtCore import Qt
-from scraper import scrape_and_post
-
+from PyQt5.QtGui import QFont, QColor, QPalette
+from PyQt5.QtCore import Qt, QPropertyAnimation, QRect
 
 class TaskManager(QMainWindow):
     def __init__(self):
         super().__init__()
         self.tasks = {}  # Format: {link: {"description": desc, "price": price}}
+        self.is_dark_mode = False  # Variable to track the mode
         self.init_ui()
 
     def init_ui(self):
         self.setWindowTitle("SAFEHOME")
         self.setGeometry(100, 100, 800, 600)
 
-        # Main layout
+        # Main Layout
         main_layout = QVBoxLayout()
 
         # Title
         title = QLabel("SAFEHOME")
-        title.setFont(QFont("Helvetica", 18, QFont.Bold))
+        title.setFont(QFont("Helvetica", 24, QFont.Bold))
         title.setAlignment(Qt.AlignCenter)
+        title.setStyleSheet("color: #4CAF50;")
         main_layout.addWidget(title)
 
-        # Input fields
+        # Input fields layout
         input_layout = QVBoxLayout()
 
         # Link Input
         self.link_input = QLineEdit()
         self.link_input.setPlaceholderText("ჩაწერეთ ლინკი")
         self.link_input.setFont(QFont("Helvetica", 12))
+        self.link_input.setStyleSheet("background-color: #F1F8E9; color: #333333; border-radius: 5px; padding: 10px;")
         input_layout.addWidget(QLabel("ლინკი:"))
         input_layout.addWidget(self.link_input)
 
@@ -40,6 +41,7 @@ class TaskManager(QMainWindow):
         self.description_input = QTextEdit()
         self.description_input.setPlaceholderText("ჩაწერეთ აღწერა")
         self.description_input.setFont(QFont("Helvetica", 12))
+        self.description_input.setStyleSheet("background-color: #F1F8E9; color: #333333; border-radius: 5px; padding: 10px;")
         input_layout.addWidget(QLabel("აღწერა:"))
         input_layout.addWidget(self.description_input)
 
@@ -47,20 +49,33 @@ class TaskManager(QMainWindow):
         self.price_input = QLineEdit()
         self.price_input.setPlaceholderText("ჩაწერეთ ფასი (არასავალდებულო)")
         self.price_input.setFont(QFont("Helvetica", 12))
+        self.price_input.setStyleSheet("background-color: #F1F8E9; color: #333333; border-radius: 5px; padding: 10px;")
         input_layout.addWidget(QLabel("ფასი:"))
         input_layout.addWidget(self.price_input)
 
         main_layout.addLayout(input_layout)
 
-        # Buttons
+        # Buttons layout with animation
         button_layout = QHBoxLayout()
+
         add_button = QPushButton("დავალების დამატება")
+        add_button.setStyleSheet("background-color: #4CAF50; color: white; border-radius: 5px; padding: 10px; font-size: 14px;")
+        add_button.setFixedHeight(40)
         add_button.clicked.connect(self.add_task)
         button_layout.addWidget(add_button)
 
         process_button = QPushButton("დავალებების შესრულება")
+        process_button.setStyleSheet("background-color: #FF9800; color: white; border-radius: 5px; padding: 10px; font-size: 14px;")
+        process_button.setFixedHeight(40)
         process_button.clicked.connect(self.process_tasks)
         button_layout.addWidget(process_button)
+
+        # Dark/Light mode toggle button
+        toggle_button = QPushButton("ბნელი/ნათელი რეჟიმი")
+        toggle_button.setStyleSheet("background-color: #2196F3; color: white; border-radius: 20px; padding: 10px; font-size: 14px;")
+        toggle_button.setFixedHeight(40)
+        toggle_button.clicked.connect(self.toggle_mode)
+        button_layout.addWidget(toggle_button)
 
         main_layout.addLayout(button_layout)
 
@@ -68,15 +83,21 @@ class TaskManager(QMainWindow):
         self.task_table = QTableWidget(0, 3)
         self.task_table.setHorizontalHeaderLabels(["ლინკი", "აღწერა", "ფასი"])
         self.task_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.task_table.setStyleSheet("QTableWidget {background-color: #355F2E;} QTableWidget::item {padding: 10px;} QHeaderView::section {background-color: #4CAF50; color: white; font-weight: bold;}")
         main_layout.addWidget(self.task_table)
 
         # Edit/Delete Buttons
         edit_delete_layout = QHBoxLayout()
+
         edit_button = QPushButton("რედაქტირება")
+        edit_button.setStyleSheet("background-color: #2196F3; color: white; border-radius: 5px; padding: 10px; font-size: 14px;")
+        edit_button.setFixedHeight(40)
         edit_button.clicked.connect(self.edit_task)
         edit_delete_layout.addWidget(edit_button)
 
         delete_button = QPushButton("წაშლა")
+        delete_button.setStyleSheet("background-color: #F44336; color: white; border-radius: 5px; padding: 10px; font-size: 14px;")
+        delete_button.setFixedHeight(40)
         delete_button.clicked.connect(self.delete_task)
         edit_delete_layout.addWidget(delete_button)
 
@@ -86,6 +107,69 @@ class TaskManager(QMainWindow):
         container = QWidget()
         container.setLayout(main_layout)
         self.setCentralWidget(container)
+
+        # Set initial mode to light
+        self.apply_light_mode()
+
+    def toggle_mode(self):
+        if self.is_dark_mode:
+            self.apply_light_mode()
+        else:
+            self.apply_dark_mode()
+        self.is_dark_mode = not self.is_dark_mode
+
+    def apply_light_mode(self):
+        self.setStyleSheet("""
+            QMainWindow {
+                background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #A5D6A7, stop:1 #FFEB3B);
+            }
+            QPushButton {
+                background-color: #4CAF50;
+                color: white;
+            }
+            QLabel {
+                color: #333333;
+            }
+            QLineEdit, QTextEdit {
+                background-color: #F1F8E9;
+                color: #333333;
+            }
+            QTableWidget {
+                background-color: #FFFFFF;
+            }
+            QHeaderView::section {
+                background-color: #4CAF50;
+                color: white;
+                font-weight: bold;
+            }
+        """)
+
+    def apply_dark_mode(self):
+        self.setStyleSheet("""
+            QMainWindow {
+                background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #2C2C2C, stop:1 #1C1C1C);
+            }
+            QPushButton {
+                background-color: #333333;
+                color: white;
+            }
+            QLabel {
+                color: #FFFFFF;
+            }
+            QLineEdit, QTextEdit {
+                background-color: #444444;
+                color: #FFFFFF;
+            }
+            QTableWidget {
+                background-color: #333333;
+                color: #FFFFFF;
+            }
+            QHeaderView::section {
+                background-color: #4CAF50;
+                color: white;
+                font-weight: bold;
+            }
+        """)
 
     def add_task(self):
         link = self.link_input.text().strip()
