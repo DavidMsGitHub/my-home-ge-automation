@@ -4,12 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea6f862a-792c-45b7-a49f-5d86d0e84497" name="Changes" comment="bumbume">
+    <list default="true" id="ea6f862a-792c-45b7-a49f-5d86d0e84497" name="Changes" comment="GUI Updated">
+      <change afterPath="$PROJECT_DIR$/logs/errors-log.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/advanced_scraper.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/for_driver.py" beforeDir="false" afterPath="$PROJECT_DIR$/for_driver.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/publish_buy.py" beforeDir="false" afterPath="$PROJECT_DIR$/publish_buy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/publish_rent.py" beforeDir="false" afterPath="$PROJECT_DIR$/publish_rent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +55,7 @@
   "keyToString": {
     "Python.advanced_scraper.executor": "Run",
     "Python.main.executor": "Run",
+    "Python.publish_buy.executor": "Debug",
     "Python.publisher.executor": "Debug",
     "Python.sandbox_scraper.executor": "Run",
     "Python.scraper.executor": "Run",
@@ -58,7 +64,12 @@
     "git-widget-placeholder": "main"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/logs" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="myhome-automation" />
       <option name="ENV_FILES" value="" />
@@ -238,8 +249,34 @@
       <option name="project" value="LOCAL" />
       <updated>1734297449083</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="GUI Updated">
+      <option name="closed" value="true" />
+      <created>1734301109442</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1734301109442</updated>
+    </task>
+    <task id="LOCAL-00016" summary="GUI Updated">
+      <option name="closed" value="true" />
+      <created>1734301861605</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1734301861605</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -259,6 +296,7 @@
     <MESSAGE value="Added Renting Mode, Fixed some errors, Fixed Unable to upload 1 bedroom apartment(now it works too) + some small speed improvements" />
     <MESSAGE value="bumbumebi" />
     <MESSAGE value="bumbume" />
-    <option name="LAST_COMMIT_MESSAGE" value="bumbume" />
+    <MESSAGE value="GUI Updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="GUI Updated" />
   </component>
 </project>

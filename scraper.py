@@ -13,10 +13,10 @@ def check_type(post_element):
     elif "ქირავდება" in post_element:
         return "ქირავდება"
 
-def scrape_and_post(link, desc="", price = ""):
+def scrape_and_post(id, desc="", price = "", area = ""):
     driver = cdriver()
-    url = link
-    driver.get(url)
+    link = f"https://www.myhome.ge/pr/{id}"
+    driver.get(link)
 
     script = WebDriverWait(driver, 20).until(
         EC.presence_of_element_located((By.ID, "__NEXT_DATA__"))
@@ -51,14 +51,15 @@ def scrape_and_post(link, desc="", price = ""):
     scraped_dict = {
         "tipi": check_type(data["dynamic_title"]),
         "saxeli": data["dynamic_title"],
+        "qalaqi": data["city_name"],
         "id": str(data["id"]),
         "misamarti": data["address"],
-        "fasi": str(data["price"]["1"]["price_total"]),
+        "fasi": str(data["price"]["2"]["price_total"]),
         "parti": str(data["area"]),
-        "otax-raodenoba": str(data["room_type_id"]),
-        "sadzinebeli": int(data["bedroom_type_id"]),
-        "sartuli": str(data["floor"]),
-        "sartuli-sul": str(data["total_floors"]),
+        "otax-raodenoba": int(data["room_type_id"]),
+        "sadzinebeli": float(data["bedroom_type_id"]),
+        "sartuli": float(data["floor"]),
+        "sartuli-sul": float(data["total_floors"]),
         "status": status_id,
 
         "build_year": data["build_year"],
@@ -74,6 +75,7 @@ def scrape_and_post(link, desc="", price = ""):
         "loggia_area": data["loggia_area"], # lojis parti
         "store_room_area": data["storeroom_area"], # sacavis parti
 
+
         "additions": parameter_list, # damatebiti parametrebis listi [kitchen, investment, washing_machine ..etc]
     }
 
@@ -83,8 +85,8 @@ def scrape_and_post(link, desc="", price = ""):
     wait_until_cs("img.object-contain", 30, driver).click()
     time.sleep(0.5)
     gancxadebisid = str(data["id"])
-    if not os.path.exists(gancxadebisid):
-        os.makedirs(gancxadebisid)
+    if not os.path.exists(f"images/{gancxadebisid}"):
+        os.makedirs(f"images/{gancxadebisid}")
 
     images = driver.find_elements(By.CSS_SELECTOR, "img.absolute")
     count = 1
@@ -92,7 +94,7 @@ def scrape_and_post(link, desc="", price = ""):
     for image in images:
         url = image.get_attribute("src")
         response = requests.get(url, stream=True)
-        with open(f"{gancxadebisid}/{count}.png", "wb") as img:
+        with open(f"images/{gancxadebisid}/{count}.png", "wb") as img:
             shutil.copyfileobj(response.raw, img)
         response.close()
         count += 1
@@ -103,10 +105,14 @@ def scrape_and_post(link, desc="", price = ""):
 
     driver.quit()
 
-    #fasis shecvla tu gui-shi shecvlilia
+    #fasis da kvadratulobis shecvla tu gui-shi shecvlilia
 
     if int(price) > 0:
         scraped_dict["fasi"] = str(price)
+    if int(area) > 0:
+        scraped_dict["area"] = str(area)
+
+    #_______----------_-__________________________________
 
     if check_type(data["dynamic_title"]) == "იყიდება":
         publish(link,scraped_dict,desc)

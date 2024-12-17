@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QFont, QColor, QPalette
 from PyQt5.QtCore import Qt, QPropertyAnimation, QRect
+from scraper import scrape_and_post
 
 class TaskManager(QMainWindow):
     def __init__(self):
@@ -31,11 +32,13 @@ class TaskManager(QMainWindow):
 
         # Link Input
         self.link_input = QLineEdit()
-        self.link_input.setPlaceholderText("ჩაწერეთ ლინკი")
+        self.link_input.setPlaceholderText("ჩაწერეთ პოსტის აიდი")
         self.link_input.setFont(QFont("Helvetica", 12))
         self.link_input.setStyleSheet("background-color: #F1F8E9; color: #333333; border-radius: 5px; padding: 10px;")
-        input_layout.addWidget(QLabel("ლინკი:"))
+        input_layout.addWidget(QLabel("პოსტის აიდი:"))
         input_layout.addWidget(self.link_input)
+
+
 
         # Description Input
         self.description_input = QTextEdit()
@@ -52,6 +55,14 @@ class TaskManager(QMainWindow):
         self.price_input.setStyleSheet("background-color: #F1F8E9; color: #333333; border-radius: 5px; padding: 10px;")
         input_layout.addWidget(QLabel("ფასი:"))
         input_layout.addWidget(self.price_input)
+
+        # Price Input
+        self.area_input = QLineEdit()
+        self.area_input.setPlaceholderText("ჩაწერეთ კვადრატულობა (არასავალდებულო)")
+        self.area_input.setFont(QFont("Helvetica", 12))
+        self.area_input.setStyleSheet("background-color: #F1F8E9; color: #333333; border-radius: 5px; padding: 10px;")
+        input_layout.addWidget(QLabel("კვადრატულობა:"))
+        input_layout.addWidget(self.area_input)
 
         main_layout.addLayout(input_layout)
 
@@ -81,7 +92,7 @@ class TaskManager(QMainWindow):
 
         # Task Table
         self.task_table = QTableWidget(0, 3)
-        self.task_table.setHorizontalHeaderLabels(["ლინკი", "აღწერა", "ფასი"])
+        self.task_table.setHorizontalHeaderLabels(["პოსტის აიდი", "აღწერა", "ფასი"])
         self.task_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.task_table.setStyleSheet("QTableWidget {background-color: #355F2E;} QTableWidget::item {padding: 10px;} QHeaderView::section {background-color: #4CAF50; color: white; font-weight: bold;}")
         main_layout.addWidget(self.task_table)
@@ -175,9 +186,10 @@ class TaskManager(QMainWindow):
         link = self.link_input.text().strip()
         description = self.description_input.toPlainText().strip()
         price = self.price_input.text().strip()
+        area = self.area_input.text().strip()
 
         if not link or not description:
-            QMessageBox.warning(self, "შეცდომა", "გთხოვთ შეიყვანეთ ლინკი და აღწერა.")
+            QMessageBox.warning(self, "შეცდომა", "გთხოვთ შეიყვანეთ აიდი და აღწერა.")
             return
 
         try:
@@ -186,11 +198,18 @@ class TaskManager(QMainWindow):
             QMessageBox.warning(self, "შეცდომა", "ფასი უნდა იყოს რიცხვი.")
             return
 
-        self.tasks[link] = {"description": description, "price": price}
+        try:
+            area = float(area) if area else 0.0
+        except ValueError:
+            QMessageBox.warning(self, "error", "kvadratuloba unda iyos ricxvi")
+            return
+
+        self.tasks[link] = {"description": description, "price": price, "area": area}
         self.update_task_table()
         self.link_input.clear()
         self.description_input.clear()
         self.price_input.clear()
+        self.area_input.clear()
         QMessageBox.information(self, "დამატებულია", "დავალება წარმატებით დაემატა!")
 
     def update_task_table(self):
@@ -201,6 +220,7 @@ class TaskManager(QMainWindow):
             self.task_table.setItem(row_position, 0, QTableWidgetItem(link))
             self.task_table.setItem(row_position, 1, QTableWidgetItem(task["description"]))
             self.task_table.setItem(row_position, 2, QTableWidgetItem(str(task["price"])))
+            self.task_table.setItem(row_position, 3, QTableWidgetItem(str(task["area"])))
 
     def edit_task(self):
         selected_row = self.task_table.currentRow()
@@ -214,6 +234,7 @@ class TaskManager(QMainWindow):
         self.link_input.setText(link)
         self.description_input.setPlainText(task["description"])
         self.price_input.setText(str(task["price"]))
+        self.area_input.setText(str(task["area"]))
         self.update_task_table()
 
     def delete_task(self):
@@ -234,8 +255,8 @@ class TaskManager(QMainWindow):
 
         results = []
         for link, task in self.tasks.items():
-            result = scrape_and_post(link, task["description"], task["price"])
-            results.append(f"ლინკი: {link}\nშედეგი: {result}")
+            result = scrape_and_post(link, task["description"], task["price"], task["area"])
+            results.append(f"პოსტის აიდი: {link}\nშედეგი: {result}")
 
         QMessageBox.information(self, "შედეგები", "\n\n".join(results))
         self.tasks.clear()

@@ -32,13 +32,11 @@ def wait_until_id(time, driver, id):
 
 
 def wait_until_xpath(time, driver, xpath):
-    try:
-        gela = WebDriverWait(driver, time).until(
-            EC.presence_of_element_located((By.XPATH, xpath))
-        )
-        return gela
-    except:
-        return False
+    gela = WebDriverWait(driver, time).until(
+        EC.presence_of_element_located((By.XPATH, xpath))
+    )
+    return gela
+
 
 def wait_until_cs(cssselector, time, driver):
     gela = WebDriverWait(driver, time).until(
