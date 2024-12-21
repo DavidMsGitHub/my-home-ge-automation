@@ -5,8 +5,10 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QFont, QColor, QPalette
 from PyQt5.QtCore import Qt, QPropertyAnimation, QRect
 from scraper import scrape_and_post
-from guardian import check_for_ip
+from funqciebi import check_for_ip, login
 
+
+login()
 check_for_ip()
 
 class TaskManager(QMainWindow):
@@ -201,7 +203,6 @@ class TaskManager(QMainWindow):
         self.link_input.clear()
         self.price_input.clear()
         self.area_input.clear()
-        QMessageBox.information(self, "დამატებულია", "დავალება წარმატებით დაემატა!")
 
     def update_task_table(self):
         while self.task_table.rowCount() > 0:

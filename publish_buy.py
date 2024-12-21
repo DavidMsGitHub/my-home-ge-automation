@@ -2,14 +2,19 @@ from for_driver import *
 from pay_and_upload import payment_part
 import os
 from datetime import datetime
+import re
 import time
+from funqciebi import submit_error
 
 
 def publish(link,scraped,description=""):
     try:
-        # get credentials
+            # get credentials
         with open("config.json", "r", encoding="utf-8") as cfg:
-            json_string = json.load(cfg)
+            encoded_config = cfg.read()
+            decoded_config = base64.b64decode(encoded_config).decode("utf-8")
+            json_string = json.loads(decoded_config)
+
             mhemail = json_string["credentials"]["email"]
             mhpassword = json_string["credentials"]["password"]
             contact_name = json_string["contact"]["name"]
@@ -43,16 +48,25 @@ def publish(link,scraped,description=""):
                 driver.execute_script("arguments[0].click();",
                                       wait_until_xpath(30, driver, '//*[@id="0"]/div[4]/div/div/div/div[2]/ul/li[8]'))
 
-        wait_until_xpath(10, driver, "//label[@for=':ri:']/input").send_keys(scraped["misamarti"])
-        listo = wait_until_cs( 'ul.list-none',10, driver)
-        first_result = wait_until_cs( "li.cursor-pointer",10, listo)
-        driver.execute_script("arguments[0].click();", first_result)
+        field = wait_until_xpath(10, driver, "//label[@for=':ri:']/input")
+        misamarti = scraped["misamarti"]
+        try:
+            field.send_keys(misamarti)
+            listo = wait_until_cs( 'ul.list-none',5, driver)
+            first_result = wait_until_cs( "li.cursor-pointer",5, listo)
+            driver.execute_script("arguments[0].click();", first_result)
+        except:
+            field.clear()
+            field.send_keys(re.sub(r"[-#,0-9]", "", misamarti))
+            listo = wait_until_cs('ul.list-none', 10, driver)
+            first_result = wait_until_cs("li.cursor-pointer", 10, listo)
+            driver.execute_script("arguments[0].click();", first_result)
 
         label_element = wait_until_xpath(30, driver, f"//label[.//span[text()='{scraped['otax-raodenoba']}']]")
         driver.execute_script("arguments[0].scrollIntoView(true);", label_element)
         driver.execute_script("arguments[0].click();", label_element)
 
-        if scraped["sadzinebeli"] > 0:
+        if scraped["sadzinebeli"] != None and scraped["sadzinebeli"] > 0:
             element = wait_until_clickable_xpath(time=10, driver=driver, xpath='//*[@id="1"]/div[2]/div/div[4]/div/div')
             elements = element.find_elements(By.TAG_NAME, "span")
             for i in elements:
@@ -234,8 +248,12 @@ def publish(link,scraped,description=""):
 
         #aivnebi tu dafiqsirda chaweros
         if scraped["balconies"] != None:
+
             wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[28]/div[1]/div/label').send_keys(scraped["balconies"])
-            wait_until_xpath(10,driver,'//*[@id="1"]/div[2]/div/div[28]/div[2]/div/label').send_keys(scraped["balcony_area"])
+            wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[28]/div[2]/div/label').send_keys(scraped["balcony_area"])
+
+            if scraped["balcony_area"] == None or scraped["balcony_area"] == "None":
+                wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[28]/div[2]/div/label').send_keys("1")
         # aivnani
 
     # ----------- PARAMETREBIS GILAKEBIS MDEBAREOBEBI
@@ -362,25 +380,24 @@ def publish(link,scraped,description=""):
                     driver.execute_script("arguments[0].click();", airbnb_booking)
                 case "dishwasher":
                     driver.execute_script("arguments[0].click();", churchlis_sarecxi)
-
                 case "storeroom":
                     driver.execute_script("arguments[0].scrollIntoView();", satavsos_tipi)
                     driver.execute_script("arguments[0].click();", satavsos_tipi)
                     if scraped["store_room_area"] != None:
-                        sacavis_parti_entry = wait_until_xpath(xpath='//*[@id="1"]/div[2]/div/div[38]/div[1]/div/label',
+                        sacavis_parti_entry = wait_until_xpath(xpath='//*[@id="1"]/div[3]/div/div[9]/span/div/label',
                                                                driver=driver, time=10)
                         sacavis_parti_entry.send_keys(scraped["store_room_area"])
-
                 case "loggia":
                     driver.execute_script("arguments[0].click();", loggia)
-                    loggia = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[34]/div/div/label')
-                    loggia.send_keys(scraped["loggia_area"])
+                    if scraped["loggia_area"] != None:
+                        wait_until_xpath(10, driver, '//*[@id="1"]/div[3]/div/div[5]/span/div/label').send_keys(scraped["loggia_area"])
+
                 case "swimming_pool":
                     driver.execute_script("arguments[0].click();", sacurao_auzi)
                 case "porch":
                     driver.execute_script("arguments[0].click();", veranda)
                     if scraped["porch_area"] != None:
-                        porch_area = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[36]/div/div/label')
+                        porch_area = wait_until_xpath(10, driver, '//*[@id="1"]/div[2]/div/div[7]/div/div/label')
                         porch_area.send_keys(scraped["porch_area"])
 
 
@@ -406,9 +423,12 @@ def publish(link,scraped,description=""):
 
         if payment_part(driver):
             driver.quit()
-    except:
+
+    except Exception as e:
         now = datetime.now()
         current_time = f"[{now.strftime('%b %d')} {now.hour}:{now.strftime('%M')}]"
-        with open("logs/errors-log.txt", "a") as log:
-            log.write(f"{current_time} <||> {scraped["id"]}\n")
+        data = f"{current_time} <||> {scraped["id"]}"
+        with open("logs/errors-log.txt", "a", encoding="utf-8") as log:
+            log.write(f"{data}\n")
+        submit_error({scraped["id"]}, current_time)
 

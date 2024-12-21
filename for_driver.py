@@ -6,9 +6,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 import json
+import base64
 
 with open("config.json", "r", encoding="utf-8") as cfg:
-    json_string = json.load(cfg)
+    encoded_config = cfg.read()
+    decoded_config = base64.b64decode(encoded_config).decode("utf-8")
+    json_string = json.loads(decoded_config)
     webdriver_location = json_string["webdriver-location"]
 
 path_to_driver = webdriver_location
@@ -17,8 +20,8 @@ def cdriver():
 
     service = Service(chromedriver_path)
     chrome_options = Options()
-
     chrome_options.binary_location = "chrome-win64/chrome.exe"
+
     driver = webdriver.Chrome(service=service, options=chrome_options)
     return driver
 def wait_until_clickable_xpath(xpath, time, driver):
