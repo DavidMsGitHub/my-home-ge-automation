@@ -1,14 +1,3 @@
 {
-  "credentials": {
-    "email": "decpacito1997@gmail.com",
-    "password": "Maxo1997"
-  },
-
-  "contact": {
-    "name": "მურაზი",
-    "number": "577176175"
-  },
-
-  "webdriver-location": "/Users/davitmirzoevi/Desktop/Desktop - Davit’s MacBook Pro/chromedriver"
-
+    "encoded_data": "eyJjcmVkZW50aWFscyI6IHsibXlob21lIjogeyJlbWFpbCI6ICJldmVyLmJyb2tlcmlAZ21haWwuY29tIiwgInBhc3N3b3JkIjogIklvYW5hMjAwNiJ9LCAic3MuZ2UiOiB7ImVtYWlsIjogIiIsICJwYXNzd29yZCI6ICIifX0sICJjb250YWN0IjogeyJuYW1lIjogIkRhdml0IiwgIm51bWJlciI6ICI1OTk1NDQxMzAifSwgImNocm9tZWRyaXZlci1sb2NhdGlvbiI6ICJjaHJvbWVkcml2ZXIuZXhlIn0="
 }
